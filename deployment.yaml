@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bti-backend
+  labels:
+    app: bti-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bti-backend
+  template:
+    metadata:
+      labels:
+        app: bti-backend
+    spec:
+      containers:
+      - name: server
+        image: 302878951089.dkr.ecr.us-west-1.amazonaws.com/bti-backend:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: bti-backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bti-backend
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+spec:
+  type: LoadBalancer
+  selector:
+    app: bti-backend
+  ports:
+    - port: 80
+      targetPort: bti-backend
