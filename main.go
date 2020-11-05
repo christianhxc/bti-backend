@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -32,7 +33,7 @@ type Payload struct {
 func handler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	region := "us-west-1"
+	region := os.Getenv("REGION")
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(region)},
 	)
